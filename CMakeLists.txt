@@ -6,3 +6,7 @@ set(GTEST_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/libs/googletest)
 include_directories(${GTEST_ROOT})
 add_subdirectory(${GTEST_ROOT})
 link_directories(${GTEST_ROOT})
+
+set(SRC_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${SRC_ROOT})
+add_subdirectory(${SRC_ROOT})
