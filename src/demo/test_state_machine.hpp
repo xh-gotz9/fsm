@@ -12,20 +12,20 @@ enum MyState
     WORKING,
 };
 
-enum MyEvent
+enum MyEventType
 {
     TIERED,
     WAKEN,
 };
 
-template <class S>
+template <class State>
 struct MyContext
 {
-    S current_state;
+    State current_state;
 };
 
 class MyFSM
-    : public BasicFiniteStateMachine<MyState, MyContext<MyState>, MyEvent>
+    : public BasicFiniteStateMachine<MyState, MyContext<MyState>, MyEventType>
 {
 public:
     MyFSM() { init(); }

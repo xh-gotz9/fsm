@@ -2,40 +2,33 @@
 
 void MyFSM::init()
 {
-    map_state_transition =
+    map_state_transition = 
     {
         {
-            TIERED,
-            {
-                [](MyFSM::FSMContext &ctx)
-                {
-                    if (ctx.current_state == MyFSM::FSMState::WORKING)
-                    {
-                        ctx.current_state = MyFSM::FSMState::SLEEPING;
-                        return true;
-                    }
-
-                    return false;
-                },
-                [](FSMEventType ev_type, MyFSM::FSMContext &ctx) {}
-            }
+            MyFSM::FSMState::SLEEPING,
+            create_state_transition(
+                create_simple_state_trans(
+                        [](MyFSM::FSMContext &ctx, const MyFSM::FSMEvent &event) -> bool {
+                            return MyFSM::FSMEventType::WAKEN == event.ev_type;
+                        },
+                        MyFSM::FSMState::SLEEPING,
+                        MyFSM::FSMState::WORKING
+                    )
+            )
         },
         {
-            WAKEN,
+            MyFSM::FSMState::WORKING,
             {
-                [](MyFSM::FSMContext &ctx)
+                [](MyFSM::FSMContext &ctx, const MyFSM::FSMEvent &event) -> MyFSM::FSMState 
                 {
-                    if (ctx.current_state == MyFSM::FSMState::SLEEPING)
-                    {
-                        ctx.current_state = MyFSM::FSMState::WORKING;
-                        return true;
-                    }
+                    if (FSMEventType::TIERED == event.ev_type)
+                        return MyFSM::FSMState::SLEEPING;
 
-                    return false;
-                },
-                [](MyFSM::FSMEventType ev_type, MyFSM::FSMContext &ctx) {}
+                    return MyFSM::FSMState::WORKING; 
+                }
             }
         }
     };
 }
+
 
